@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TodoModuleInterface } from "@/interfaces/interface";
 import { Save } from "lucide-react";
+import data from "@/data/data";
+import { Textarea } from "./ui/textarea";
 
 export function TodoModule({ Title = "Add a new Todo" }: TodoModuleInterface) {
   return (
@@ -27,7 +29,38 @@ export function TodoModule({ Title = "Add a new Todo" }: TodoModuleInterface) {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="">
+          {data.TodoModuleInputs.map((item, index) => (
+            <div
+              key={index}
+              className={`${
+                item.name === "Completed" &&
+                "flex items-center flex-row-reverse justify-end"
+              }`}
+            >
+              <Label
+                htmlFor={item.id}
+                className={`text-right ${
+                  item.name === "Completed" && "text-lg"
+                }`}
+              >
+                {item.name}
+              </Label>
+              {item.name === "Body" ? (
+                <Textarea id={item.id} className="mt-2" 
+                placeholder={item.placeholder}/>
+              ) : (
+                <Input
+                  id={item.id}
+                  type={item.type}
+                  className={`mt-2 ${
+                    item.name === "Completed" && "w-5 mt-0 mr-2"
+                  }`}
+                  placeholder={item.placeholder}
+                />
+              )}
+            </div>
+          ))}
+          {/* <div className="">
             <Label htmlFor="title" className="text-right ">
               Title
             </Label>
@@ -44,10 +77,14 @@ export function TodoModule({ Title = "Add a new Todo" }: TodoModuleInterface) {
             <Label htmlFor="description" className="text-right text-lg">
               Completed
             </Label>
-          </div>
+          </div> */}
         </div>
         <DialogFooter>
-          <Button type="button" onClick={() => console.log("clicked")} className="w-full">
+          <Button
+            type="button"
+            onClick={() => console.log("clicked")}
+            className="w-full"
+          >
             <Save />
             Save
           </Button>
