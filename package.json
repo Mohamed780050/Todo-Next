@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "PP": "prisma db push"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.2",
@@ -18,6 +19,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.454.0",
+    "mongodb": "^6.10.0",
     "next": "15.0.2",
     "next-themes": "^0.3.0",
     "react": "19.0.0-rc-02c0e824-20241028",
