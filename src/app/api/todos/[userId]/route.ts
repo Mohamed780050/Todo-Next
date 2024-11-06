@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectionFunc from "@/lib/mongobd/connection";
 import { ObjectId } from "mongodb";
+import { revalidatePath } from "next/cache";
 export async function GET(
   req: NextRequest,
   { params }: { params: { userId: string } }
 ) {
   try {
-    const { userId } = params;
+    const { userId } = await params;
     if (!userId)
       return NextResponse.json({ message: "Id is Required" }, { status: 400 });
     const connection = await connectionFunc(
@@ -22,17 +23,15 @@ export async function GET(
   }
 }
 export async function POST(
-  req: Omit<NextRequest, "body"> & {
-    body: { Title: string; Body: string; Completed: boolean };
-  },
+  req: NextRequest,
   { params }: { params: { userId: string } }
 ) {
   try {
-    const { userId } = params;
-    const { Title, Body, Completed } = req.body;
+    const { userId } = await params;
+    const { Title, Body, Completed } = await req.json();
     if (!userId || !Title)
       return NextResponse.json(
-        { message: "Id and Title are Required" },
+        { message: "userId and Title are Required" },
         { status: 400 }
       );
     const connection = await connectionFunc(
@@ -47,6 +46,7 @@ export async function POST(
       Owner: userId,
       createdAt: `${Date.now()}`,
     });
+    revalidatePath("/");
     return NextResponse.json({ message: "Todo is added" }, { status: 200 });
   } catch (err) {
     console.log(err);

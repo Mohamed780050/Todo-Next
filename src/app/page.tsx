@@ -1,13 +1,10 @@
 "use client";
-import { TodoModule } from "@/components/TodoModule";
-import { Button } from "@/components/ui/button";
+import Todos from "@/components/Todos";
 
 export default function Home() {
   return (
     <div>
-      <TodoModule>
-        <Button>add Note</Button>
-      </TodoModule>
+      <Todos />
     </div>
   );
 }

@@ -18,24 +18,41 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TodoModuleValidation } from "@/validation/validate";
 import { z } from "zod";
+import axios from "axios";
+import { useUser } from "@clerk/nextjs";
+import { useState } from "react";
 
 export function TodoModule({
   Title = "Add a new Todo",
   children,
 }: TodoModuleInterface) {
+  const [open, setOpen] = useState(false);
+  const { user } = useUser();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<{ title: string; body: string; completed: boolean }>({
+  } = useForm<{ Title: string; Body: string; Completed: boolean }>({
     resolver: zodResolver(TodoModuleValidation),
   });
   async function submit(values: z.infer<typeof TodoModuleValidation>) {
-    console.log(values);
+    try {
+      console.log(values);
+      const response = await axios.post(
+        `http://localhost:3000/api/todos/${user?.id}`,
+        values
+      );
+      console.log(response);
+      setOpen(false);
+    } catch (err) {
+      console.log(err);
+    }
   }
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={open}>
+      <DialogTrigger asChild>
+        <span onClick={() => setOpen(true)}>{children}</span>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{Title}</DialogTitle>

@@ -5,8 +5,13 @@ export interface TodoModuleInterface {
   children: ReactNode;
 }
 export interface TodoModuleInputsInerface {
-  id: "title" | "body" | "completed";
+  id: "Title" | "Body" | "Completed";
   name: string;
   type: "text" | "checkbox";
   placeholder?: string;
+}
+export interface TodoInterface {
+  Title: string;
+  Body: string;
+  Completed: boolean;
 }

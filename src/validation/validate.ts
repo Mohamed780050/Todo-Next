@@ -1,6 +1,6 @@
 import z from "zod";
 export const TodoModuleValidation = z.object({
-  title: z.string().min(1, "Feild is Empty"),
-  body: z.string(),
-  completed: z.boolean().default(false),
+  Title: z.string().min(1, "Feild is Empty"),
+  Body: z.string(),
+  Completed: z.boolean().default(false),
 });
