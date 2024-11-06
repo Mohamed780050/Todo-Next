@@ -14,13 +14,28 @@ import { TodoModuleInterface } from "@/interfaces/interface";
 import { Save } from "lucide-react";
 import data from "@/data/data";
 import { Textarea } from "./ui/textarea";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TodoModuleValidation } from "@/validation/validate";
+import { z } from "zod";
 
-export function TodoModule({ Title = "Add a new Todo" }: TodoModuleInterface) {
+export function TodoModule({
+  Title = "Add a new Todo",
+  children,
+}: TodoModuleInterface) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<{ title: string; body: string; completed: boolean }>({
+    resolver: zodResolver(TodoModuleValidation),
+  });
+  async function submit(values: z.infer<typeof TodoModuleValidation>) {
+    console.log(values);
+  }
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{Title}</DialogTitle>
@@ -28,7 +43,7 @@ export function TodoModule({ Title = "Add a new Todo" }: TodoModuleInterface) {
             Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <form className="grid gap-4 py-4" onSubmit={handleSubmit(submit)}>
           {data.TodoModuleInputs.map((item, index) => (
             <div
               key={index}
@@ -46,8 +61,12 @@ export function TodoModule({ Title = "Add a new Todo" }: TodoModuleInterface) {
                 {item.name}
               </Label>
               {item.name === "Body" ? (
-                <Textarea id={item.id} className="mt-2" 
-                placeholder={item.placeholder}/>
+                <Textarea
+                  id={item.id}
+                  className="mt-2"
+                  placeholder={item.placeholder}
+                  {...register(`${item.id}`)}
+                />
               ) : (
                 <Input
                   id={item.id}
@@ -56,39 +75,23 @@ export function TodoModule({ Title = "Add a new Todo" }: TodoModuleInterface) {
                     item.name === "Completed" && "w-5 mt-0 mr-2"
                   }`}
                   placeholder={item.placeholder}
+                  {...register(`${item.id}`)}
                 />
+              )}
+              {errors[`${item.id}`]?.message && (
+                <p className="mt-1 text-red-800 text-sm">
+                  {errors[`${item.id}`]?.message}
+                </p>
               )}
             </div>
           ))}
-          {/* <div className="">
-            <Label htmlFor="title" className="text-right ">
-              Title
-            </Label>
-            <Input id="title" className="col-span-3 mt-2" />
-          </div>
-          <div className="">
-            <Label htmlFor="description" className="text-right ">
-              Description
-            </Label>
-            <Input id="description" className="col-span-3 mt-2" />
-          </div>
-          <div className="flex items-center space-x-2">
-            <Input type="checkbox" id="description" className="w-4" />
-            <Label htmlFor="description" className="text-right text-lg">
-              Completed
-            </Label>
-          </div> */}
-        </div>
-        <DialogFooter>
-          <Button
-            type="button"
-            onClick={() => console.log("clicked")}
-            className="w-full"
-          >
-            <Save />
-            Save
-          </Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button disabled={isSubmitting} type="submit" className="w-full">
+              <Save />
+              Save
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
