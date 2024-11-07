@@ -13,12 +13,13 @@ import { TodoInterface } from "@/interfaces/interface";
 import TableSkeleton from "./TableSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { getTodos } from "@/config/getTodosFunc";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux";
 import { RootState } from "@/Redux/store";
 import TodoActions from "./TodoActions";
+import { Badge } from "@/components/ui/badge";
 
 export function TodosTable({ userId }: { userId: string | undefined }) {
-  const {refetch} = useSelector((state:RootState) => state.global)
+  const { refetch } = useSelector((state: RootState) => state.global);
   const { isLoading, data } = useQuery({
     queryKey: [`${refetch}`],
     queryFn: async () => await getTodos(userId),
@@ -32,7 +33,7 @@ export function TodosTable({ userId }: { userId: string | undefined }) {
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Title</TableHead>
+              <TableHead className="max-w-[250px]">Title</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -42,8 +43,22 @@ export function TodosTable({ userId }: { userId: string | undefined }) {
               ? data.map((item: TodoInterface, index: number) => (
                   <TableRow key={index}>
                     <TableCell>{item.Title}</TableCell>
-                    <TableCell>{typeof item.Completed}</TableCell>
-                    <TableCell><TodoActions TodoInfo={item} userId={userId} TodoId={item._id} /></TableCell>
+                    <TableCell>
+                      {item.Completed ? (
+                        <Badge className="bg-emerald-600 dark:bg-emerald-400">
+                          Completed
+                        </Badge>
+                      ) : (
+                        <Badge>Uncompleted</Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <TodoActions
+                        TodoInfo={item}
+                        userId={userId}
+                        TodoId={item._id}
+                      />
+                    </TableCell>
                   </TableRow>
                 ))
               : "No Todos"}

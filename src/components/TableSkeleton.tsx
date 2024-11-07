@@ -15,7 +15,7 @@ function TableSkeleton() {
       <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Title</TableHead>
+          <TableHead className="max-w-[250px]">Title</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>

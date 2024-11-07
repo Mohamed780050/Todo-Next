@@ -56,6 +56,8 @@ export function TodoModule({
           `http://localhost:3000/api/todos/${user?.id}`,
           { ...values, id: TodoInfo?._id }
         );
+        dispatch(changeRefetch());
+        setOpen(false);
       }
     } catch (err) {
       console.log(err);
