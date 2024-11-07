@@ -17,11 +17,11 @@ import {useSelector} from "react-redux"
 import { RootState } from "@/Redux/store";
 import TodoActions from "./TodoActions";
 
-export function TodosTable({ id }: { id: string | undefined }) {
+export function TodosTable({ userId }: { userId: string | undefined }) {
   const {refetch} = useSelector((state:RootState) => state.global)
   const { isLoading, data } = useQuery({
     queryKey: [`${refetch}`],
-    queryFn: async () => await getTodos(id),
+    queryFn: async () => await getTodos(userId),
   });
   return (
     <>
@@ -43,7 +43,7 @@ export function TodosTable({ id }: { id: string | undefined }) {
                   <TableRow key={index}>
                     <TableCell>{item.Title}</TableCell>
                     <TableCell>{typeof item.Completed}</TableCell>
-                    <TableCell><TodoActions/></TableCell>
+                    <TableCell><TodoActions userId={userId} TodoId={item._id} /></TableCell>
                   </TableRow>
                 ))
               : "No Todos"}

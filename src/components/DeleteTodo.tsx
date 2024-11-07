@@ -1,3 +1,4 @@
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,10 +10,27 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
+import { Trash2 } from "lucide-react";
+import { ReactNode, useState } from "react";
 
-export function DeleteTodo({ children }: { children: ReactNode }) {
+async function deleteTheTodo(userId: string | undefined, TodoId: string) {
+  try {
+    console.log(userId, TodoId);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export function DeleteTodo({
+  children,
+  userId,
+  TodoId,
+}: {
+  children: ReactNode;
+  userId: string | undefined;
+  TodoId: string;
+}) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -26,7 +44,16 @@ export function DeleteTodo({ children }: { children: ReactNode }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction
+            disabled={isSubmitting}
+            onClick={async () => {
+              setIsSubmitting(true);
+              await deleteTheTodo(userId, TodoId);
+            }}
+          >
+            <Trash2 />
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

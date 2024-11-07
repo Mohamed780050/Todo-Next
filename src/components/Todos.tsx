@@ -8,7 +8,7 @@ function Todos() {
   return (
     <div className="container">
       <TodosAddingButton />
-      <TodosTable id={user?.id} />
+      <TodosTable userId={user?.id} />
     </div>
   );
 }
