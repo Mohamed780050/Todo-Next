@@ -1,10 +1,14 @@
 import { TodoModule } from "@/components/TodoModule";
 import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
 
 function TodosAddingButton() {
   return (
     <TodoModule>
-      <Button>add Note</Button>
+      <Button>
+        <PlusCircle size={20}/>
+        add Todo
+      </Button>
     </TodoModule>
   );
 }

@@ -10,28 +10,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TodoInterface } from "@/interfaces/interface";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import TableSkeleton from "./TableSkeleton";
+import { useQuery } from "@tanstack/react-query";
+import { getTodos } from "@/config/getTodosFunc";
+import {useSelector} from "react-redux"
+import { RootState } from "@/Redux/store";
 
 export function TodosTable({ id }: { id: string | undefined }) {
-  const [data, setData] = useState<[] | TodoInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await axios.get(`http://localhost:3000/api/todos/${id}`);
-        setData(data.data);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
+  const {refetch} = useSelector((state:RootState) => state.global)
+  const { isLoading, data } = useQuery({
+    queryKey: [`${refetch}`],
+    queryFn: async () => await getTodos(id),
+  });
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         <TableSkeleton />
       ) : (
         <Table>
@@ -45,7 +38,7 @@ export function TodosTable({ id }: { id: string | undefined }) {
           </TableHeader>
           <TableBody>
             {data.length
-              ? data.map((item, index) => (
+              ? data.map((item: TodoInterface, index: number) => (
                   <TableRow key={index}>
                     <TableCell>{item.Title}</TableCell>
                     <TableCell>{item.Completed}</TableCell>

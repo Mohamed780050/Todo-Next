@@ -21,11 +21,14 @@ import { z } from "zod";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
+import {useDispatch} from "react-redux"
+import { changeRefetch } from "@/Redux/global";
 
 export function TodoModule({
   Title = "Add a new Todo",
   children,
 }: TodoModuleInterface) {
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(false);
   const { user } = useUser();
   const {
@@ -42,6 +45,7 @@ export function TodoModule({
         `http://localhost:3000/api/todos/${user?.id}`,
         values
       );
+      dispatch(changeRefetch())
       console.log(response);
       setOpen(false);
     } catch (err) {
