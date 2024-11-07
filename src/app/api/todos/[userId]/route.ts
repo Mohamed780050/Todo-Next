@@ -68,12 +68,13 @@ export async function POST(
 //   }
 // }
 export async function DELETE(
-  req: Omit<NextRequest, "body"> & { body: { TodoId: string } },
+  req: NextRequest,
   { params }: { params: { userId: string } }
 ) {
   try {
-    const { userId } = params;
-    const { TodoId } = req.body;
+    const { userId } = await params;
+    const { searchParams } = new URL(req.url);
+    const TodoId = searchParams.get("TodoId")
     if (!userId || !TodoId)
       return NextResponse.json(
         { message: "User ID and Todo ID are Required" },

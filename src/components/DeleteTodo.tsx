@@ -1,4 +1,3 @@
-"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,12 +9,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { changeRefetch } from "@/Redux/global";
+import axios from "axios";
 import { Trash2 } from "lucide-react";
 import { ReactNode, useState } from "react";
+import { useDispatch } from "react-redux";
 
 async function deleteTheTodo(userId: string | undefined, TodoId: string) {
   try {
-    console.log(userId, TodoId);
+    const response = axios.delete(
+      `http://localhost:3000/api/todos/${userId}?TodoId=${TodoId}`
+    );
+    console.log(response)
   } catch (err) {
     console.log(err);
   }
@@ -31,6 +36,7 @@ export function DeleteTodo({
   TodoId: string;
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const dispatch = useDispatch()
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -49,6 +55,7 @@ export function DeleteTodo({
             onClick={async () => {
               setIsSubmitting(true);
               await deleteTheTodo(userId, TodoId);
+              dispatch(changeRefetch())
             }}
           >
             <Trash2 />
