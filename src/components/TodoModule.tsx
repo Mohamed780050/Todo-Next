@@ -21,15 +21,15 @@ import { z } from "zod";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
-import {useDispatch} from "react-redux"
+import { useDispatch } from "react-redux";
 import { changeRefetch } from "@/Redux/global";
 
 export function TodoModule({
   Title = "Add a new Todo",
   children,
 }: TodoModuleInterface) {
-  const dispatch = useDispatch()
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   const { user } = useUser();
   const {
     register,
@@ -45,18 +45,16 @@ export function TodoModule({
         `http://localhost:3000/api/todos/${user?.id}`,
         values
       );
-      dispatch(changeRefetch())
+      dispatch(changeRefetch());
+      setOpen(false)
       console.log(response);
-      setOpen(false);
     } catch (err) {
       console.log(err);
     }
   }
   return (
-    <Dialog open={open}>
-      <DialogTrigger asChild>
-        <span onClick={() => setOpen(true)}>{children}</span>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{Title}</DialogTitle>

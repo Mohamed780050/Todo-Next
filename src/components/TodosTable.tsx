@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getTodos } from "@/config/getTodosFunc";
 import {useSelector} from "react-redux"
 import { RootState } from "@/Redux/store";
+import TodoActions from "./TodoActions";
 
 export function TodosTable({ id }: { id: string | undefined }) {
   const {refetch} = useSelector((state:RootState) => state.global)
@@ -41,7 +42,8 @@ export function TodosTable({ id }: { id: string | undefined }) {
               ? data.map((item: TodoInterface, index: number) => (
                   <TableRow key={index}>
                     <TableCell>{item.Title}</TableCell>
-                    <TableCell>{item.Completed}</TableCell>
+                    <TableCell>{typeof item.Completed}</TableCell>
+                    <TableCell><TodoActions/></TableCell>
                   </TableRow>
                 ))
               : "No Todos"}
