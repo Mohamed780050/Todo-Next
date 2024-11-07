@@ -3,6 +3,9 @@ import { ReactNode } from "react";
 export interface TodoModuleInterface {
   Title?: string;
   children: ReactNode;
+  TodoId?: string;
+  method: "POST" | "PUT";
+  TodoInfo?:TodoInterface
 }
 export interface TodoModuleInputsInerface {
   id: "Title" | "Body" | "Completed";

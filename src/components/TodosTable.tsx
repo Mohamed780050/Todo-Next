@@ -43,7 +43,7 @@ export function TodosTable({ userId }: { userId: string | undefined }) {
                   <TableRow key={index}>
                     <TableCell>{item.Title}</TableCell>
                     <TableCell>{typeof item.Completed}</TableCell>
-                    <TableCell><TodoActions userId={userId} TodoId={item._id} /></TableCell>
+                    <TableCell><TodoActions TodoInfo={item} userId={userId} TodoId={item._id} /></TableCell>
                   </TableRow>
                 ))
               : "No Todos"}

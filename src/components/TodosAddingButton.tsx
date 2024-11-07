@@ -4,7 +4,7 @@ import { PlusCircle } from "lucide-react";
 
 function TodosAddingButton() {
   return (
-    <TodoModule>
+    <TodoModule method="POST">
       <Button>
         <PlusCircle size={20}/>
         add Todo

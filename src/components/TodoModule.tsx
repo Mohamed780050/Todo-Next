@@ -27,6 +27,9 @@ import { changeRefetch } from "@/Redux/global";
 export function TodoModule({
   Title = "Add a new Todo",
   children,
+  method,
+  TodoId,
+  TodoInfo,
 }: TodoModuleInterface) {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
@@ -40,14 +43,20 @@ export function TodoModule({
   });
   async function submit(values: z.infer<typeof TodoModuleValidation>) {
     try {
-      console.log(values);
-      const response = await axios.post(
-        `http://localhost:3000/api/todos/${user?.id}`,
-        values
-      );
-      dispatch(changeRefetch());
-      setOpen(false)
-      console.log(response);
+      if (method === "POST") {
+        const response = await axios.post(
+          `http://localhost:3000/api/todos/${user?.id}`,
+          values
+        );
+        dispatch(changeRefetch());
+        setOpen(false);
+        console.log(response);
+      } else {
+        const response = await axios.put(
+          `http://localhost:3000/api/todos/${user?.id}`,
+          { ...values, id: TodoInfo?._id }
+        );
+      }
     } catch (err) {
       console.log(err);
     }
@@ -84,12 +93,23 @@ export function TodoModule({
                   id={item.id}
                   className="mt-2"
                   placeholder={item.placeholder}
+                  defaultValue={method === "POST" ? "" : `${TodoInfo?.Body}`}
                   {...register(`${item.id}`)}
                 />
               ) : (
                 <Input
                   id={item.id}
                   type={item.type}
+                  defaultValue={
+                    method === "POST"
+                      ? ""
+                      : item.type === "checkbox"
+                      ? undefined
+                      : `${TodoInfo?.Title}`
+                  }
+                  defaultChecked={
+                    method === "POST" ? false : TodoInfo?.Completed
+                  }
                   className={`mt-2 ${
                     item.name === "Completed" && "w-5 mt-0 mr-2"
                   }`}

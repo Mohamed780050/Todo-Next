@@ -56,17 +56,51 @@ export async function POST(
     );
   }
 }
-// export async function PUT() {
-//   try {
-//     return NextResponse.json();
-//   } catch (err) {
-//     console.log(err);
-//     return NextResponse.json(
-//       { message: "something went wrong" },
-//       { status: 500 }
-//     );
-//   }
-// }
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const { userId } = await params;
+    const { id, Title, Body, Completed } = await req.json();
+    if (!userId || !id || (!Title && !Body && !Completed))
+      return NextResponse.json(
+        { message: "userId and Title are Required" },
+        { status: 400 }
+      );
+    const connection = await connectionFunc(
+      `${process.env.DATABASE_URL}`,
+      "Todo-List",
+      "Todos"
+    );
+    const checkTheTodo = await connection.findOne({
+      _id: new ObjectId(`${id}`),
+    });
+    if (!checkTheTodo)
+      return NextResponse.json(
+        { message: "Todo Did not found" },
+        { status: 404 }
+      );
+    console.log(id, Title, Body, Completed);
+    await connection.updateOne(
+      { _id: new ObjectId(`${id}`) },
+      {
+        $set: {
+          Title: Title ? Title : checkTheTodo.Title,
+          Body: Body ? Body : checkTheTodo.Body,
+          Completed: Completed,
+        },
+      }
+    );
+    return NextResponse.json({ message: "Found" });
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json(
+      { message: "something went wrong" },
+      { status: 500 }
+    );
+  }
+}
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { userId: string } }
@@ -74,7 +108,7 @@ export async function DELETE(
   try {
     const { userId } = await params;
     const { searchParams } = new URL(req.url);
-    const TodoId = searchParams.get("TodoId")
+    const TodoId = searchParams.get("TodoId");
     if (!userId || !TodoId)
       return NextResponse.json(
         { message: "User ID and Todo ID are Required" },

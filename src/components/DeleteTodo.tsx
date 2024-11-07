@@ -14,13 +14,13 @@ import axios from "axios";
 import { Trash2 } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { useDispatch } from "react-redux";
+import { Button } from "./ui/button";
 
 async function deleteTheTodo(userId: string | undefined, TodoId: string) {
   try {
-    const response = axios.delete(
+    await axios.delete(
       `http://localhost:3000/api/todos/${userId}?TodoId=${TodoId}`
     );
-    console.log(response)
   } catch (err) {
     console.log(err);
   }
@@ -35,10 +35,11 @@ export function DeleteTodo({
   userId: string | undefined;
   TodoId: string;
 }) {
+  const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -50,17 +51,19 @@ export function DeleteTodo({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
+          <Button
+            variant="destructive"
             disabled={isSubmitting}
             onClick={async () => {
               setIsSubmitting(true);
               await deleteTheTodo(userId, TodoId);
-              dispatch(changeRefetch())
+              dispatch(changeRefetch());
+              setOpen(false);
             }}
           >
             <Trash2 />
             Delete
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
