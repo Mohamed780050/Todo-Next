@@ -27,6 +27,7 @@ export async function POST(
   { params }: { params: { userId: string } }
 ) {
   try {
+    const currentDate = new Date();
     const { userId } = await params;
     const { Title, Body, Completed } = await req.json();
     if (!userId || !Title)
@@ -44,7 +45,9 @@ export async function POST(
       Body: Body,
       Completed: Completed,
       Owner: userId,
-      createdAt: `${Date.now()}`,
+      createdAt: `${currentDate.getUTCDate()}/${
+        currentDate.getMonth() + 1
+      }/${currentDate.getFullYear()}`,
     });
     revalidatePath("/");
     return NextResponse.json({ message: "Todo is added" }, { status: 200 });
