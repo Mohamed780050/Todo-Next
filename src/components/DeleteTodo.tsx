@@ -1,6 +1,5 @@
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -16,7 +15,7 @@ import { ReactNode, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "./ui/button";
 
-async function deleteTheTodo(userId: string | undefined, TodoId: string) {
+async function deleteTheTodo(userId: string | null, TodoId: string) {
   try {
     await axios.delete(
       `http://localhost:3000/api/todos/${userId}?TodoId=${TodoId}`
@@ -32,7 +31,7 @@ export function DeleteTodo({
   TodoId,
 }: {
   children: ReactNode;
-  userId: string | undefined;
+  userId: string | null;
   TodoId: string;
 }) {
   const [open, setOpen] = useState(false);

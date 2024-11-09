@@ -5,7 +5,7 @@ export interface TodoModuleInterface {
   children: ReactNode;
   TodoId?: string;
   method: "POST" | "PUT";
-  TodoInfo?:TodoInterface
+  TodoInfo?: TodoInterface;
 }
 export interface TodoModuleInputsInerface {
   id: "Title" | "Body" | "Completed";
@@ -19,4 +19,8 @@ export interface TodoInterface {
   Body: string;
   Completed: boolean;
   createdAt: string;
+}
+
+export interface UserIdInterface {
+  userId: string | null;
 }

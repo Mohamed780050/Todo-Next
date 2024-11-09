@@ -34,7 +34,7 @@ function TableSkeleton() {
               <p> Created at</p>
             </div>
           </TableHead>
-          <TableHead>
+          <TableHead className="max-w-32">
             <div className="flex items-center space-x-1">
               <Cog size={15} />
               <p>Action</p>
@@ -55,7 +55,7 @@ function TableSkeleton() {
               <TableCell>
                 <Skeleton className="w-full h-6" />
               </TableCell>
-              <TableCell className="flex items-center space-x-2">
+              <TableCell className="flex items-center space-x-2 max-w-32">
                 <Skeleton className="w-9 h-9 rounded-full" />
                 <Skeleton className="w-9 h-9 rounded-full" />
               </TableCell>

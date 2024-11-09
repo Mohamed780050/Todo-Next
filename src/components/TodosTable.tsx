@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TodoInterface } from "@/interfaces/interface";
+import { TodoInterface, UserIdInterface } from "@/interfaces/interface";
 import TableSkeleton from "./TableSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { getTodos } from "@/config/getTodosFunc";
@@ -25,7 +25,7 @@ import {
   Cog,
 } from "lucide-react";
 
-export function TodosTable({ userId }: { userId: string | undefined }) {
+export function TodosTable({ userId }: UserIdInterface) {
   const { refetch } = useSelector((state: RootState) => state.global);
   const { isLoading, data } = useQuery({
     queryKey: [`${refetch}`],
@@ -58,8 +58,8 @@ export function TodosTable({ userId }: { userId: string | undefined }) {
                   <p> Created at</p>
                 </div>
               </TableHead>
-              <TableHead>
-                <div className="flex items-center space-x-1">
+              <TableHead className="max-w-32">
+                <div className="flex items-center space-x-1 ">
                   <Cog size={15} />
                   <p>Action</p>
                 </div>

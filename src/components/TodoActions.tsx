@@ -9,7 +9,7 @@ function TodoActions({
   TodoId,
   TodoInfo,
 }: {
-  userId: string | undefined;
+  userId: string | null;
   TodoId: string;
   TodoInfo: TodoInterface;
 }) {
